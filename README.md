@@ -1,2 +1,0 @@
-# Nomad-Trello
-Cloning Trello
