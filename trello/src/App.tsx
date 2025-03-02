@@ -34,17 +34,39 @@ export function App(){
   const [toDos, setToDos]=useRecoilState(toDoState);
   
   const dragEnd=(info:DropResult)=>{
-    if(!info.destination)
-      return;
-    console.log(info);
     const {destination, draggableId, source}=info;
+    if(!destination)return;//if it isn't moved -> kill the func
     
-    /*setToDos((oldToDos)=>{
-      const copyToDos=[...oldToDos];
-      const sourceToDo=copyToDos.splice(source.index,1);
-      copyToDos.splice(destination.index, 0, ...sourceToDo)
-      return copyToDos
-    })*/
+    console.log(info);//check info
+    
+    if(destination?.droppableId===source.droppableId){
+      setToDos((oldToDos)=>{
+        const boardCopy=[...oldToDos[source.droppableId]]
+        const sourceToDo=boardCopy.splice(source.index,1);
+        boardCopy.splice(destination?.index, 0, ...sourceToDo)
+        return {
+          ...oldToDos,
+          [source.droppableId]:boardCopy
+        }})
+    }
+    else if(destination?.droppableId!==source.droppableId){
+      setToDos((allBoards)=>{
+        //get array of destinaion and source
+        const sourceBoard=[...allBoards[source.droppableId]];
+        const destinationBoard=[...allBoards[destination.droppableId]];
+        
+        //delete
+        const sourceToDo=sourceBoard.splice(source.index,1);
+        
+        //add -> to the destination
+        destinationBoard.splice(destination?.index, 0, ...sourceToDo)
+        
+        return {
+          ...allBoards,
+          [source.droppableId]:sourceBoard,
+          [destination.droppableId]:destinationBoard
+        }})
+    }
   };
 
   return (
