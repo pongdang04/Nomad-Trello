@@ -12,14 +12,6 @@ const Boards = styled.div`
   gap: 10px;
 `;
 
-
-const Card = styled.div`
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 10px 10px;
-  background-color: ${(props) => props.theme.cardColor};
-`;
-
 const Wrapper = styled.div`
   display: flex;
   max-width: 480px;
