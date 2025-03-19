@@ -4,6 +4,8 @@ import DraggableCard from "./DraggableCard";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ITodo } from "../atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { toDoState } from "../atoms";
 
 const Wrapper = styled.div`
   padding: 10px 0px;
@@ -56,9 +58,20 @@ function Board({ toDos, boardId }: IBoradProps) {
   const onClick = () => {
     inputRef.current?.focus();
   };
-  const onValid = (data: IForm) => {
-    setValue("todo", "");
+  const setToDos = useSetRecoilState(toDoState);
+
+  const onValid = (todo: IForm) => {
+    const newTodo: ITodo = {
+      id: Date.now(), // 고유한 ID 생성
+      text: todo.todo,
+    };
+    setToDos((prevState) => ({
+      ...prevState,
+      [boardId]: [...prevState[boardId], newTodo], // ✅ 올바르게 boardId 접근
+    }));
+    setValue("todo", ""); // 입력 필드 초기화
   };
+
   return (
     <Wrapper>
       <Title>{boardId}</Title>
@@ -68,9 +81,9 @@ function Board({ toDos, boardId }: IBoradProps) {
           type="text"
           placeholder={`Add task on ${boardId}`}
         />
+        <button onClick={onClick}>Click me</button>
       </Form>
-      <input ref={inputRef} placeholder="grab me"></input>
-      <button onClick={onClick}>Click me</button>
+
       <Droppable droppableId={boardId}>
         {(magic, snapshot) => (
           <Area
