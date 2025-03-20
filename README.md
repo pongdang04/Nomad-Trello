@@ -36,4 +36,4 @@ npm start
 ## 업데이트 예정
 
 - Board의 기본 height를 고정하여, 카드를 움직일 때마다 움직이지 않도록 수정
-- card가 board안에 들어올 수 있도록 css 수정
+- card가 board안에 들어올 수 있도록 css 수정-> 수정완료
